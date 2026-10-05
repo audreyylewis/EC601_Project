@@ -57,9 +57,11 @@ Riskiest assumption/its cost:
 
 Evaluation and its baseline:
 Potential harm:
- - 
- -
- -
+ - The worst realistic misuse is an adversary intentionally manipulating the ambient energy field to trigger constant emergency saves, weaponizing the device's own survival mechanism to perform a denial-of-service attack on a medical implant.
+ - Additionally, a corrupted write to the permanent memory could permanently brick the device *in vivo*, requiring the patient to undergo an invasive emergency surgery to extract it.
+ - If the survival circuit misses its nanosecond deadline, patients relying on these bio-sensors will suffer misdiagnoses from corrupted or completely lost physiological data.
+
+
 
 
 Faculty:
