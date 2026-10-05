@@ -7,3 +7,31 @@ LIPIcs.SNAPL.2017.8.pdf - Dill
  - - environmental sensor concurrency (sensors usually operated on interrupts, which can be affected by shutdowns)
  - - energy storage and distribution
 
+A Low-Power Dual-Factor Authentication Unit.pdf - Audrey: 
+-   Designs a hardware-accelerated security handshake to prevent 
+    remote energy-drain attacks, but leaves open how to securely 
+    authenticate a system that is designed to constantly die and 
+    reboot mid-operation.
+
+Ramadass-2010-A batteryless thermoelectric energy-harvesting interface 
+circuit with 35mV startup voltage.pdf - Audrey: 
+-   Demonstrates how to harvest a microscopic 35 mV signal to slowly 
+    trickle-charge a capacitor, but leaves open the digital logic 
+    required to safely execute math on that fragile, easily drained 
+    energy puddle.
+
+Intermittent-Aware Design Exploration of Systolic Array Using.pdf - Audrey: 
+-   Simulates the theory of saving hardware accelerator data to Non-Volatile 
+    Memory (NVM) during brownouts, but leaves open the physical RTL 
+    implementation and strict timing proof that your FPGA project will 
+    actually build.
+
+Improving engineered biological systems.pdf - Audrey 
+-   Establishes that sensors need long-term microfluidic isolation to 
+    capture slow biological events, but leaves open how the hardware will 
+    stitch that data together across dozens of inevitable power deaths.
+
+Integrated Real-Time CMOS Luminescence Sensing and.pdf - Audrey
+-   Integrates CMOS electronics with microfluidics for real-time biological 
+    sensing, but leaves open how to sustain this continuous data 
+    collection when the ambient power source unpredictably fails.
