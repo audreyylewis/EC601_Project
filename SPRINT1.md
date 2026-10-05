@@ -49,6 +49,7 @@ The final mathematical output perfectly matches a software-simulated baseline, p
 
 Riskiest assumption/its cost:
  - Assumption: we can consistently detect a collapsing voltage rail and trigger a hardware interrupt fast enough to give the FPGA time to act before the voltage drops below the SRAM physical retention limit.
+
 Evaluation and its baseline:
 Potential harm:
  - 
