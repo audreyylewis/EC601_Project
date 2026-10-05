@@ -55,17 +55,21 @@ Riskiest assumption/its cost:
  - We can complete a full SPI serialization and write transaction to the external FRAM within the tiny microsecond energy window provided by the dying capacitor.
  - We can accurately simulate a stochastic, weak ambient energy harvester (a fluctuating current source) on a breadboard to predictably test the FPGA's response.
 
-Evaluation and its baseline:
 Potential harm:
  - The worst realistic misuse is an adversary intentionally manipulating the ambient energy field to trigger constant emergency saves, weaponizing the device's own survival mechanism to perform a denial-of-service attack on a medical implant.
  - Additionally, a corrupted write to the permanent memory could permanently brick the device *in vivo*, requiring the patient to undergo an invasive emergency surgery to extract it.
  - If the survival circuit misses its nanosecond deadline, patients relying on these bio-sensors will suffer misdiagnoses from corrupted or completely lost physiological data.
 
 
-
-
 Faculty:
 Rabia Tugce Yazicigil
 - Tracks the developments of cyber-secure biological systems
-- Question:
+- Directs the WISE-Circuits Lab at BU
+- Co-authored foundational papers on both sub-1.4 cm³ ingestible capsules (2023) and        hardware-accelerated security for medical implants (Maji et al., 2020).
+- Question: When designing cyber-secure biological systems that run on intermittent energy, do you consider the biggest security vulnerability to be the energy cost of re-authenticating the device every single time it wakes up from a power loss, or the physical vulnerability of the data while it sits unpowered in permanent memory?
+
+Ajay Joshi 
+- Leads the Integrated Circuits and Systems Group at BU
+- Specializes in hardware security, VLSI, and low-power architectures
+- Question: When securing a device that runs on harvested energy, how do you balance the energy budget between doing the actual computational work and defending against 'denial-of-sleep' attacks?
 
