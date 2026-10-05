@@ -1,10 +1,10 @@
-1. Mission.  One sentence, using the template from class. Do not call it final — it is your best guess until your first test says otherwise.
+1. Mission.
 For hardware engineers who need to build tiny, battery-less medical sensors, the Intermittent Computing Prototype is a custom software simulation that guarantees a device can finish its work on weak, flickering power. Unlike traditional computer chips that wipe their memory and reboot every time the voltage drops, it saves the sensor's exact progress to permanent memory and resumes when energy returns.
 
-2. Target user.  One specific person. If your product has several users, name the primary one and build for them first.
+2. Target user.
 Hardware Systems Architect for in vivo biological edge devices.
 
-3. User stories.  Your top 5, with acceptance criteria. Put them on your GitHub board as issues — the board is the plan; the document just explains it.
+3. User stories. 
 Story 1: The Hardware Interrupt
 As an RTL designer, I want a dedicated "Survival Controller" FSM that listens for a low-voltage interrupt, so that the chip can instantly halt the main processor.
 Acceptance Criteria:
@@ -37,10 +37,15 @@ The final mathematical output perfectly matches a software-simulated baseline, p
 4. Feasibility — show me, don’t tell me.  “We will use dataset X” is a wish. Downloaded, loaded by a script, committed to the repo — that is feasibility. Same for API keys and hardware: prove access this week.
 
 
-5. Tooling.  Languages, frameworks, models, and why — one line each. Full setup: next slide.
+5. Tooling.
+* **Language:** SystemVerilog – Required to design the custom synthesizable hardware state machine (the Survival Controller) at the register-transfer level.
+* **Framework:** Xilinx Vivado – Necessary to synthesize the SystemVerilog code, simulate the clock cycles, and flash the logic onto the physical FPGA board.
+* **Model or API:** OpenAI `gpt-4o-mini` – The the survival mechanism relies entirely on bare-metal hardware logic, as software-based APIs consume too much power and time during a brownout. This model will be used for help with research throughout the process. Inexpensive ($0.15/1M input, $0.60/1M output tokens; default tier 1 rate limit 500 RPM / 200k TPM) for fast structured outputs.
+* **Data Tools:** Python (NumPy/Matplotlib) – Needed to compute the baseline continuous math simulation to verify against the FPGA's final data output after 25 power deaths.
+* **Testing Tool:** Oscilloscope and Logic Analyzer – Required to physically measure the analog voltage discharge curve and verify the exact SPI transmission timing before the power rail completely collapses.
+* **Where it runs:** Local laptop and physical lab bench – The final test requires manually unplugging the power to simulate hardware death, which cannot be done remotely on the SCC or via cloud credits.
 
-
-6. The demo sentence.  “At the end of two weeks we will show ____ working end to end.” One sentence. If you cannot write it, your goals are too vague.
+6. The demo sentence.  “At the end of two weeks we will show a complete plan and documentation set that outlines the entirety of the next few weeks.” 
 
 Riskiest assumption/its cost:
  - Assumption: we can consistently detect a collapsing voltage rail and trigger a hardware interrupt fast enough to give the FPGA time to act before the voltage drops below the SRAM physical retention limit.
