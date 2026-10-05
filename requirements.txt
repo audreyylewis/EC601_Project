@@ -1,6 +1,17 @@
 FPGA: Xilinx NEXYS A7 FPGA board
 Free for use in PHO 115, after application for access.
 Cannot remove board from lab.
+Can SSH in, I believe?
 
 Xilinx Vivado:
 Free for use in PHO 115, after application for access.
+Can SSH in, I believe?
+
+Breadboard:
+Owned by Audrey already.
+
+Python, C++:
+Publicly available.
+
+gcc/g++:
+Used to compile c/c++ code.
