@@ -1,0 +1,6 @@
+FPGA: Xilinx NEXYS A7 FPGA board
+Free for use in PHO 115, after application for access.
+Cannot remove board from lab.
+
+Xilinx Vivado:
+Free for use in PHO 115, after application for access.
