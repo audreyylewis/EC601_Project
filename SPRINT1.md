@@ -49,12 +49,19 @@ The final mathematical output perfectly matches a software-simulated baseline, p
 
 Riskiest assumption/its cost:
  - Assumption: we can consistently detect a collapsing voltage rail and trigger a hardware interrupt fast enough to give the FPGA time to act before the voltage drops below the SRAM physical retention limit.
+ - Cost: Least costly approach is to build a reliable hardware base first and then move on to software, rather than building software to fix buggy hardware.
+ - "We pivot if...": the oscilloscope measurement shows the voltage collapses from the interrupt threshold to the SRAM failure threshold in less time than it takes to transmit 32 bits of state data over SPI at our maximum reliable clock frequency.
+ Other assumptions:
+ - We can complete a full SPI serialization and write transaction to the external FRAM within the tiny microsecond energy window provided by the dying capacitor.
+ - We can accurately simulate a stochastic, weak ambient energy harvester (a fluctuating current source) on a breadboard to predictably test the FPGA's response.
 
 Evaluation and its baseline:
 Potential harm:
  - 
  -
  -
+
+
 Faculty:
 Rabia Tugce Yazicigil
 - Tracks the developments of cyber-secure biological systems
