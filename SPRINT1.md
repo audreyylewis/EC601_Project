@@ -69,7 +69,7 @@ For hardware engineers who need to build tiny, battery-less medical sensors, the
 Required to design the custom synthesizable hardware state machine (the Survival Controller) at the register-transfer level.
 * **Framework: Xilinx Vivado**
 Necessary to synthesize the SystemVerilog code, simulate the clock cycles, and flash the logic onto the physical FPGA board.
-* **Model/API: OpenAI `gpt-4o-mini**`
+* **Model/API: OpenAI `gpt-4o-mini`**
 The survival mechanism relies entirely on bare-metal hardware logic, as software-based APIs consume too much power and time during a brownout. This model will be used for help with research throughout the process. Inexpensive ($0.15/1M input, $0.60/1M output tokens; default tier 1 rate limit 500 RPM / 200k TPM) for fast structured outputs.
 * **Data Tools: Python (NumPy/Matplotlib)**
 Needed to compute the baseline continuous math simulation to verify against the FPGA's final data output after 25 power deaths.
