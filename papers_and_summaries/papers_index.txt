@@ -35,3 +35,8 @@ Integrated Real-Time CMOS Luminescence Sensing and.pdf - Audrey
 -   Integrates CMOS electronics with microfluidics for real-time biological 
     sensing, but leaves open how to sustain this continuous data 
     collection when the ambient power source unpredictably fails.
+
+EnablingEfficientWearablesAnAnalysisofLowPowerMicrocontrollersForBiomedicalApplications.pdf
+ - identifies architectural features that help increase energy efficiency in context of low power devices
+   analyses pre-existing commercial devices
+   details process of creating such a device
