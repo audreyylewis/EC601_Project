@@ -35,12 +35,12 @@ This guide outlines the physical breadboard setup required to simulate a stochas
 
 ### Step 4: Wire the AD8561 Comparator
 *Note: The AD8561 is a push-pull comparator and does not require an external pull-up resistor.*
-1. **Pin 3 (V+):** Connect to the stable `3.3V` rail.
+1. **Pin 1 (V+):** Connect to the stable `3.3V` rail.
 2. **Pin 4 (V-):** Connect to `GND`.
 3. **Pin 6 (GND):** Connect to `GND`.
 4. **Pin 5 (LATCH):** Connect to `GND` to disable the latch and allow continuous tracking.
-5. **Pin 2 (IN-):** Connect to the **Declining Voltage Rail** (the capacitor).
-6. **Pin 1 (IN+):** Connect to the **Reference Voltage** (the potentiometer wiper).
+5. **Pin 1 (IN-):** Connect to the **Declining Voltage Rail** (the capacitor).
+6. **Pin 2 (IN+):** Connect to the **Reference Voltage** (the potentiometer wiper).
 
 ### Step 5: The FPGA Connection & Measurement
 1. Run a jumper wire directly from the AD8561's **Pin 7 (Q Output)** to the assigned GPIO interrupt pin on your FPGA. 
