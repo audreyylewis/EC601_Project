@@ -1,56 +1,51 @@
 # Breadboard Wiring Guide: Testing the Hardware Interrupt
 
-This guide details how to wire the analog testbench required to validate our riskiest assumption: **Does the capacitor hold enough energy to keep the chip alive until the FSM finishes writing to permanent memory?**
+# Sprint 1: Intermittent Power Hardware Simulator
 
-## Components Needed
-*   FPGA Development Board
-*   Breadboard & Jumper wires
-*   Manual Toggle Switch
-*   Electrolytic Capacitor (100µF to 1000µF)
-*   Resistors: 1x 220Ω (or 330Ω), 1x 10kΩ
-*   Potentiometer (10kΩ)
-*   Analog Comparator IC (AD8561)
-*   Oscilloscope
+This guide outlines the physical breadboard setup required to simulate a stochastic energy harvester and measure the "death window" (the $\Delta t$ between the low-voltage interrupt and total system failure).
 
----
-
-## Step 1: The Main Power Bus and Common Ground
-Establish a stable power supply for the comparator and a shared ground for the logic levels.
-1. Connect a `3.3V` pin from the FPGA board to the RED power rail of the breadboard.
-2. Connect a `GND` pin from the FPGA board to the BLUE ground rail of the breadboard. 
-*(Critical: Without this shared ground, the interrupt logic will float and fail).*
-
-## Step 2: The Harvested Energy Circuit
-Simulate the trickle-charge and rapid depletion of a micro-harvester.
-1. Place the toggle switch on the breadboard. Connect one side to the `3.3V` rail.
-2. Connect the other side of the switch to a new, empty row. This will be the **Declining Voltage Rail**.
-3. Place the capacitor bridging the **Declining Voltage Rail** and `GND`.
-4. Place the 220Ω resistor in parallel with the capacitor (bridging the **Declining Voltage Rail** and `GND`). This acts as a dummy load, simulating the power draw of the FPGA datapath.
-
-## Step 3: The Interrupt Threshold (Reference)
-Create a fixed reference voltage to dictate exactly when the hardware alarm sounds.
-1. Place the potentiometer on the breadboard.
-2. Connect its outer pins to the `3.3V` rail and `GND`.
-3. Use a multimeter to measure the middle (wiper) pin. Adjust the dial until it outputs exactly **2.8V** (or whatever threshold gives the FSM enough time before the FPGA crashes).
-
-## Step 4: The Comparator
-Wire the comparator to trigger a `HIGH` signal when the harvested energy drops below the threshold.
-1. Power the AD8561 IC by connecting its `VCC` pin to the `3.3V` rail and its `GND` pin to the `GND` rail.
-2. Wire the **Declining Voltage Rail** to the comparator’s **Inverting Input (IN-)**.
-3. Wire the **2.8V Reference Pin** (middle potentiometer pin) to the comparator’s **Non-Inverting Input (IN+)**.
-
-## Step 5: The FPGA Connection
-Route the hardware interrupt safely to the FPGA.
-1. The AD8561 is an open-collector output, so place a **10kΩ pull-up resistor** connecting the `3.3V` rail to the comparator's `Output` pin.
-2. Run a jumper wire from the comparator's `Output` pin directly to the assigned GPIO interrupt pin on the FPGA.
+## Components Required
+*   1x Breadboard
+*   1x Toggle Switch
+*   1x Electrolytic Capacitor (100µF to 1000µF recommended for baseline testing)
+*   1x **220Ω Resistor** (Simulates the FPGA datapath load)
+*   1x Potentiometer (e.g., 10kΩ for the voltage divider)
+*   1x **AD8561 Ultrafast Comparator** 
+*   Jumper wires
+*   Oscilloscope (2-channel)
 
 ---
 
-## The Execution & Measurement Test
-To prove the riskiest assumption, run this physical test before writing the complex SPI logic:
-1. Turn the toggle switch **ON**. The Declining Voltage Rail should charge up to 3.3V. The comparator output should rest at `LOW` (0V).
-2. Hook **Oscilloscope Probe 1** to the Declining Voltage Rail and **Oscilloscope Probe 2** to the Comparator Output.
-3. Flip the switch **OFF**.
-4. **Measure $\Delta t$:** Look at the oscilloscope trace. Measure the exact time window between Probe 2 snapping `HIGH` (the interrupt) and Probe 1 dropping below the FPGA's minimum operating voltage (e.g., 2.0V). 
+## Wiring Steps
 
-**Kill Criterion:** If $\Delta t$ is shorter than the time required to clock 32 bits over SPI at the target frequency, the architecture fails. You must increase the capacitor size before touching SystemVerilog.
+### Step 1: Establish the Main Power Bus
+1. Connect a `3.3V` pin from your Intel/Altera FPGA development board to the positive power rail of the breadboard.
+2. Connect a `GND` pin from the FPGA to the ground rail of the breadboard. *(Critical: The analog circuit and digital FPGA must share this common ground).*
+
+### Step 2: Build the Harvested Energy Circuit (The "Puddle")
+1. Insert the toggle switch across the breadboard trench. Connect one side to the stable `3.3V` rail.
+2. Connect the other side of the switch to a new, empty breadboard row. This row represents the **Declining Voltage Rail**.
+3. Place the capacitor connecting the **Declining Voltage Rail** to `GND`.
+4. Place the **220Ω resistor** in parallel with the capacitor, also connecting the **Declining Voltage Rail** to `GND`. 
+
+### Step 3: Set the Interrupt Threshold (The Reference)
+1. Insert the potentiometer. Connect its outer pins to the stable `3.3V` rail and `GND`.
+2. Connect a multimeter to the middle wiper pin and `GND`. 
+3. Adjust the potentiometer until it outputs exactly **2.8V** (or ~0.5V above your FPGA's minimum operating voltage). This wiper pin is your **Reference Voltage**.
+
+### Step 4: Wire the AD8561 Comparator
+*Note: The AD8561 is a push-pull comparator and does not require an external pull-up resistor.*
+1. **Pin 3 (V+):** Connect to the stable `3.3V` rail.
+2. **Pin 4 (V-):** Connect to `GND`.
+3. **Pin 6 (GND):** Connect to `GND`.
+4. **Pin 5 (LATCH):** Connect to `GND` to disable the latch and allow continuous tracking.
+5. **Pin 2 (IN-):** Connect to the **Declining Voltage Rail** (the capacitor).
+6. **Pin 1 (IN+):** Connect to the **Reference Voltage** (the potentiometer wiper).
+
+### Step 5: The FPGA Connection & Measurement
+1. Run a jumper wire directly from the AD8561's **Pin 7 (Q Output)** to the assigned GPIO interrupt pin on your FPGA. 
+2. Hook Oscilloscope Channel 1 to the **Declining Voltage Rail**.
+3. Hook Oscilloscope Channel 2 to the AD8561 **Pin 7 (Q Output)**.
+
+## The Test Execution
+Turn on the main power. The toggle switch acts as the ambient energy source. Flip the switch OFF to simulate a "passing shadow" or energy failure. Channel 2 on the oscilloscope will snap HIGH instantly as the voltage crosses your 2.8V reference, while Channel 1 will show the steep discharge curve dictated by your 220Ω resistor. The time between the interrupt firing and Channel 1 hitting the SRAM failure threshold is the hard physical deadline your SystemVerilog FSM must beat.
