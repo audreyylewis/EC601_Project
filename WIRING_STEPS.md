@@ -9,7 +9,7 @@ This guide details how to wire the analog testbench required to validate our ris
 *   Electrolytic Capacitor (100µF to 1000µF)
 *   Resistors: 1x 220Ω (or 330Ω), 1x 10kΩ
 *   Potentiometer (10kΩ)
-*   Analog Comparator IC (e.g., LM393)
+*   Analog Comparator IC (AD8561)
 *   Oscilloscope
 
 ---
@@ -35,13 +35,13 @@ Create a fixed reference voltage to dictate exactly when the hardware alarm soun
 
 ## Step 4: The Comparator
 Wire the comparator to trigger a `HIGH` signal when the harvested energy drops below the threshold.
-1. Power the LM393 IC by connecting its `VCC` pin to the `3.3V` rail and its `GND` pin to the `GND` rail.
+1. Power the AD8561 IC by connecting its `VCC` pin to the `3.3V` rail and its `GND` pin to the `GND` rail.
 2. Wire the **Declining Voltage Rail** to the comparator’s **Inverting Input (IN-)**.
 3. Wire the **2.8V Reference Pin** (middle potentiometer pin) to the comparator’s **Non-Inverting Input (IN+)**.
 
 ## Step 5: The FPGA Connection
 Route the hardware interrupt safely to the FPGA.
-1. The LM393 is an open-collector output, so place a **10kΩ pull-up resistor** connecting the `3.3V` rail to the comparator's `Output` pin.
+1. The AD8561 is an open-collector output, so place a **10kΩ pull-up resistor** connecting the `3.3V` rail to the comparator's `Output` pin.
 2. Run a jumper wire from the comparator's `Output` pin directly to the assigned GPIO interrupt pin on the FPGA.
 
 ---
