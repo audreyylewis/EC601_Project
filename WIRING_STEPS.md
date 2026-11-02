@@ -1,3 +1,4 @@
+<img width="1920" height="1080" alt="Screenshot (1034)" src="https://github.com/user-attachments/assets/5acf7339-1f6e-4812-8c51-8189a34ff67c" />
 # Breadboard Wiring Guide: Testing the Hardware Interrupt
 
 # Sprint 1: Intermittent Power Hardware Simulator
