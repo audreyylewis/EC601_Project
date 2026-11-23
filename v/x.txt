@@ -1,0 +1,19 @@
+Connect & Power the Nexys A7
+
+1. Check the Power Jumper (JP1): Look near the top-left power switch (SW16). Blue jumper block is placed on USB (not WALL or BATT).
+2. Check the Mode Jumper (JP2): Make sure the jumper near the micro-USB port is on JTAG.
+3. Wire the Breadboard:
+	• Connect your breadboard GND to Pmod JA Pin 5 (top row, second pin from the left).
+	• Connect your breadboard 3.3V / 0V signal to Pmod JA Pin 1 (top row, rightmost pin). (Ensure gpio_pwr_ok is at 3.3V before testing so the chip isn't held in power-down mode.)
+4. Plug in Micro-USB: Connect the PROG UART micro-USB port to your computer and slide the POWER switch (SW16) ON.
+
+Build & Program the FPGA
+vivado -mode batch -source build.tcl
+OR
+1. Open Vivado -> Create Project -> choose RTL Project (check Do not specify sources at this time).
+2. Under Default Part, select Boards -> search for Nexys A7-100T (or Nexys A7-50T).
+3. Click Add Sources -> Add or create design sources -> add top_system.v.
+4. Click Add Sources -> Add or create constraints -> add nexys_a7.xdc.
+5. In the left Flow Navigator sidebar, click Generate Bitstream (this automatically runs Synthesis and Implementation first).
+6. Once complete, click Open Hardware Manager -> Open Target -> Auto Connect -> Program Device -> click Program.
+
