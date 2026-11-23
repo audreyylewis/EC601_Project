@@ -1,0 +1,57 @@
+================================================================================
+NEXYS A7 HARDWARE MANUAL TEST CHECKLIST
+Module: top_system (Add, Shift, Double-Edge Clock Switch)
+================================================================================
+
+HARDWARE PIN REFERENCE:
+- Reset (rst_n)        : Red CPU_RESET pushbutton (active-low)
+- Data Input (sw_in)   : SW3 (MSB), SW2, SW1, SW0 (LSB)
+- Clock Switch (clk_sw): SW15 (triggers on BOTH up and down flips)
+- Output (result_out)  : LD3 (MSB), LD2, LD1, LD0 (LSB)
+- Breadboard Power OK  : Pmod JA Pin 1 (3.3V = Power OK, 0V/GND = Voltage Drop)
+- Breadboard Ground    : Pmod JA Pin 5 (GND)
+
+--------------------------------------------------------------------------------
+PRE-TEST SETUP
+--------------------------------------------------------------------------------
+[ ] 1. Verify Pmod JA Pin 5 (GND) is wired to the breadboard GND rail.
+[ ] 2. Connect Pmod JA Pin 1 (gpio_pwr_ok) to the breadboard 3.3V rail (HIGH).
+[ ] 3. Set SW15 (clk_sw) DOWN (0) and SW3..SW0 (sw_in) all DOWN (0000).
+[ ] 4. Press and release the red CPU_RESET button.
+       EXPECTED: LD3..LD0 are all OFF (0000 = 0).
+
+--------------------------------------------------------------------------------
+TEST 1: RISING-EDGE SWITCH FLIP (ADD + SHIFT)
+--------------------------------------------------------------------------------
+[ ] 1. Set SW3..SW0 to 1010 (Decimal 10: SW3=UP, SW2=DOWN, SW1=UP, SW0=DOWN).
+[ ] 2. Flip SW15 UP (0 -> 1).
+       MATH: (0 + 10) / 2 = 5
+       EXPECTED: LD3..LD0 display 0101 (LD2 and LD0 ON).
+
+--------------------------------------------------------------------------------
+TEST 2: FALLING-EDGE SWITCH FLIP (DOUBLE-EDGE TRIGGERING)
+--------------------------------------------------------------------------------
+[ ] 1. Set SW3..SW0 to 0111 (Decimal 7: SW3=DOWN, SW2=UP, SW1=UP, SW0=UP).
+[ ] 2. Flip SW15 DOWN (1 -> 0).
+       MATH: (5 + 7) / 2 = 6
+       EXPECTED: LD3..LD0 display 0110 (LD2 and LD1 ON).
+
+--------------------------------------------------------------------------------
+TEST 3: ODD-SUM TRUNCATION (INTEGER DIVISION BY 2)
+--------------------------------------------------------------------------------
+[ ] 1. Set SW3..SW0 to 0011 (Decimal 3: SW1=UP, SW0=UP).
+[ ] 2. Flip SW15 UP (0 -> 1).
+       MATH: (6 + 3) / 2 = 4 (remainder 1 dropped by right-shift)
+       EXPECTED: LD3..LD0 display 0100 (LD2 ON).
+
+--------------------------------------------------------------------------------
+TEST 4: MAXIMUM 5-BIT SUM OVERFLOW CHECK (15 + 15 = 30 -> 15)
+--------------------------------------------------------------------------------
+[ ] 1. Set SW3..SW0 to 1111 (Decimal 15: all four switches UP).
+[ ] 2. Flip SW15 DOWN -> EXPECTED: (4 + 15) / 2 = 9  (LD3..LD0 = 1001).
+[ ] 3. Flip SW15 UP   -> EXPECTED: (9 + 15) / 2 = 12 (LD3..LD0 = 1100).
+[ ] 4. Flip SW15 DOWN -> EXPECTED: (12 + 15)/ 2 = 13 (LD3..LD0 = 1101).
+[ ] 5. Flip SW15 UP   -> EXPECTED: (13 + 15)/ 2 = 14 (LD3..LD0 = 1110).
+[ ] 6. Flip SW15 DOWN -> EXPECTED: (14 + 15)/ 2 = 14 (LD3..LD0 = 1110).
+
+================================================================================

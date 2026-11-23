@@ -1,0 +1,58 @@
+================================================================================
+NEXYS A7 HARDWARE MANUAL TEST CHECKLIST
+Module: top_system (Async Power Retention)
+================================================================================
+
+HARDWARE PIN REFERENCE:
+- Reset (rst_n)        : Red CPU_RESET pushbutton (active-low)
+- Data Input (sw_in)   : SW3 (MSB), SW2, SW1, SW0 (LSB)
+- Clock Switch (clk_sw): SW15 (triggers on BOTH up and down flips)
+- Output (result_out)  : LD3 (MSB), LD2, LD1, LD0 (LSB)
+- Breadboard Power OK  : Pmod JA Pin 1 (3.3V = Power OK, 0V/GND = Voltage Drop)
+- Breadboard Ground    : Pmod JA Pin 5 (GND)
+
+--------------------------------------------------------------------------------
+PRE-TEST SETUP
+--------------------------------------------------------------------------------
+[ ] 1. Verify Pmod JA Pin 5 (GND) is wired to the breadboard GND rail.
+[ ] 2. Connect Pmod JA Pin 1 (gpio_pwr_ok) to the breadboard 3.3V rail (HIGH).
+[ ] 3. Set SW15 (clk_sw) DOWN (0) and SW3..SW0 (sw_in) all DOWN (0000).
+[ ] 4. Press and release the red CPU_RESET button.
+       EXPECTED: LD3..LD0 are all OFF (0000 = 0).
+--------------------------------------------------------------------------------
+TEST 5: ASYNCHRONOUS VOLTAGE DROP (SAVE TO RETENTION MEMORY)
+--------------------------------------------------------------------------------
+[ ] 1. Confirm LD3..LD0 currently show 1110 (Decimal 14).
+[ ] 2. Move the breadboard jumper on Pmod JA Pin 1 from 3.3V to GND (0V).
+       EXPECTED: LD3..LD0 immediately turn OFF (0000), simulating chip power-off,
+                 while 14 is latched into retention_store.
+
+--------------------------------------------------------------------------------
+TEST 6: IMMUNITY TO CLOCK FLIPS DURING POWER LOSS
+--------------------------------------------------------------------------------
+[ ] 1. While Pmod JA Pin 1 is still at GND (0V), set SW3..SW0 to 0000.
+[ ] 2. Flip SW15 UP and DOWN several times.
+       EXPECTED: LD3..LD0 remain OFF (0000); stored value is unaffected.
+
+--------------------------------------------------------------------------------
+TEST 7: VOLTAGE RESTORE (LOAD FROM RETENTION MEMORY)
+--------------------------------------------------------------------------------
+[ ] 1. Move the breadboard jumper on Pmod JA Pin 1 back from GND to 3.3V.
+       EXPECTED: LD3..LD0 immediately light back up with 1110 (Decimal 14).
+
+--------------------------------------------------------------------------------
+TEST 8: RESUME NORMAL OPERATION AFTER RESTORE
+--------------------------------------------------------------------------------
+[ ] 1. Set SW3..SW0 to 0010 (Decimal 2: SW1=UP).
+[ ] 2. Flip SW15 UP (or DOWN).
+       MATH: (14 + 2) / 2 = 8
+       EXPECTED: LD3..LD0 display 1000 (LD3 ON).
+
+--------------------------------------------------------------------------------
+TEST 9: MASTER RESET OVERRIDE
+--------------------------------------------------------------------------------
+[ ] 1. Press the red CPU_RESET button.
+       EXPECTED: LD3..LD0 clear to 0000.
+[ ] 2. Drop Pmod JA Pin 1 to GND and return it to 3.3V.
+       EXPECTED: LD3..LD0 remain 0000 (confirming retention_store was also cleared).
+================================================================================
