@@ -12,5 +12,5 @@ module top(
    input [15:0] sw,
    output [15:0] led
 );
-   mockmed(sw[15:0], led[15:0]);
+   main(sw[15:0], led[15:0]);
 endmodule
